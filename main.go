@@ -62,16 +62,28 @@ func createConnection() *sql.DB {
 func createTable(db *sql.DB) {
 	query := `
 	CREATE TABLE IF NOT EXISTS users (
-		id SERIAL PRIMARY KEY,
-		name TEXT NOT NULL,
-		email TEXT UNIQUE NOT NULL
+		id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+		name VARCHAR(100) NOT NULL,
+		email VARCHAR(255) UNIQUE NOT NULL,
+		phone VARCHAR(20),
+		created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+		updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 	);
+
+	CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+	CREATE INDEX IF NOT EXISTS idx_users_created_at ON users(created_at);
 	`
+
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Fatal("Error creating table:", err)
 	}
-	fmt.Println("Table created successfully")
+
+	// _, err := db.Exec(query)
+	// if err != nil {
+	// 	log.Fatal("Error creating table:", err)
+	// }
+	// fmt.Println("Table created successfully")
 }
 
 type User struct {
