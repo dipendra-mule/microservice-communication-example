@@ -9,11 +9,11 @@ import (
 )
 
 func main() {
-	db := createConnection()
-	defer db.Close()
+	database := createConnection()
+	defer database.Close()
 
 	// Run migrations automatically
-	if err := goose.Up(db, "migrations"); err != nil {
+	if err := goose.Up(database, "migrations"); err != nil {
 		log.Fatalf("Failed to apply migrations: %v", err)
 	}
 
@@ -21,11 +21,11 @@ func main() {
 	fmt.Println("Database ready. Starting app...")
 
 	// Example: create a new user
-	newUserID := createUser(db, "Alice", "alice1@example.com")
+	newUserID := createUser(database, "Alice", "alice1@example.com")
 	fmt.Println("Inserted user with ID:", newUserID)
 
 	// Example: list all users
-	users := getUsers(db)
+	users := getUsers(database)
 	for _, u := range users {
 		fmt.Printf("👤 %s (%s)\n", u.Name, u.Email)
 	}

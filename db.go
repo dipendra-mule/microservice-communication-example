@@ -10,6 +10,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
+type DB struct {
+	*sql.DB
+}
+
 // createConnection establishes and returns a Postgres DB connection
 func createConnection() *sql.DB {
 	err := godotenv.Load(".env")
